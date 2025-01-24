@@ -14,7 +14,7 @@ PhotonLib::PhotonLib(UIListener* uiListener)
 #	pragma warning(disable:4355)
 #endif
 	: mState(State::INITIALIZED)
-	, mLoadBalancingClient(*this, PhotonLib::appID, appVersion, ExitGames::Photon::ConnectionProtocol::UDP, true)
+	, mLoadBalancingClient(*this, PhotonLib::appID, appVersion, ExitGames::Photon::ConnectionProtocol::UDP)
 	, mpOutputListener(uiListener)
 	, mSendCount(0)
 	, mReceiveCount(0)
@@ -44,9 +44,13 @@ void PhotonLib::update(void)
 	switch(mState)
 	{
 		case State::INITIALIZED:
-			mLoadBalancingClient.connect(ExitGames::LoadBalancing::AuthenticationValues().setUserID(ExitGames::Common::JString()+userID), PLAYER_NAME);
-			mState = State::CONNECTING;
-			break;
+			{
+				const ExitGames::LoadBalancing::ConnectOptions connectionOptions(ExitGames::LoadBalancing::AuthenticationValues(), PLAYER_NAME);
+
+				mLoadBalancingClient.connect(connectionOptions);
+				mState = State::CONNECTING;
+				break;
+			}	
 		case State::CONNECTED:
 			mLoadBalancingClient.opJoinOrCreateRoom(gameName);
 			mState = State::JOINING;
