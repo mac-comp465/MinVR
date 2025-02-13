@@ -44,6 +44,9 @@ macro(AutoBuild_use_package_GLFW YOUR_TARGET INTERFACE_PUBLIC_OR_PRIVATE)
                 ${PACKAGE_NAME}
                 .
 				-DCMAKE_GENERATOR_PLATFORM=${CMAKE_GENERATOR_PLATFORM}
+                -DGLFW_BUILD_DOCS=OFF
+                -DGLFW_BUILD_TESTS=OFF
+                -DGLFW_BUILD_EXAMPLES=OFF
             )
 
             AutoBuild_find_built_package_module_mode(${PACKAGE_NAME})
